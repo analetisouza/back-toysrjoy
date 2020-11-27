@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
@@ -9,6 +10,8 @@ const data = require('./data.json');
 const { setupMaster } = require('cluster');
 
 const app = express();
+
+app.use(cors());
 
 app.use(bodyParser.urlencoded({
   extended: true
@@ -37,7 +40,7 @@ app.post('/*', (req, res) => {
   
   const mailOptions = {
     from: '"ToysRJoy Minions Collection" <hereanagoes@gmail.com>',
-    to: `${req.body['email']} , analeticiarsouza@gmail.com`,
+    to: `${req.body['email']} , thiago@bgcbrasil.com.br`,
     subject: `Reserva efetuada - Nº ${leftZeros(data['idReserva'].toString())}`,
     text: `Dados da reserva: \n
            Nome: ${req.body['nome']} \n
@@ -47,6 +50,7 @@ app.post('/*', (req, res) => {
            Produto: ${req.body['produto']}`
   };
 
+  data['idReserva'] = parseInt(data['idReserva'], 10);
   const jsonString = JSON.stringify(data);
 
   fs.writeFile('./data.json', jsonString, err => {
