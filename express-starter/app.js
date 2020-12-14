@@ -6,6 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 
+const config = require('./config.json');
 const data = require('./data.json');
 const { setupMaster } = require('cluster');
 
@@ -33,14 +34,14 @@ app.post('/*', (req, res) => {
   const transport = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'hereanagoes@gmail.com',
-      pass: '---',
+      user: config['email'],
+      pass: config['senha'],
     }
   });
   
   const mailOptions = {
     from: '"ToysRJoy Minions Collection" <hereanagoes@gmail.com>',
-    to: `${req.body['email']} , thiago@bgcbrasil.com.br`,
+    to: `${req.body['email']} , analeticiarsouza@gmail.com`,
     subject: `Reserva efetuada - Nº ${leftZeros(data['idReserva'].toString())}`,
     text: `Dados da reserva: \n
            Nome: ${req.body['nome']} \n
